@@ -10,7 +10,7 @@ const App = () => {
     firstName: ""
   });
   const [count, setCount] = useState(() =>
-    JSON.parse(localStorage.getItem("count"))
+    JSON.parse(localStorage.getItem("count")) || 0
   );
   const { data, loading } = useFetch(`http://numbersapi.com/${count}/trivia`);
 
