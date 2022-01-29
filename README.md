@@ -15,5 +15,5 @@
 1.) Getting dimensions of DOM element
 
 ## useCallback
-1.) to prevent re-rendering function (shines with using React.memo())
-2.) if useEffect is dependent on a function
+1.) to prevent re-rendering function (shines with using React.memo()) <br />
+2.) if useEffect is dependent on a function <br />
