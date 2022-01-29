@@ -1,45 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useForm } from "./useForm";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Hello } from "./Hello";
-import { useFetch } from "./useFetch";
+import { Square } from "./Square";
 
 const App = () => {
-  const [values, handleChange] = useForm({
-    email: "",
-    password: "",
-    firstName: ""
-  });
+  const [count,setCount] = useState(0)
+  const favNums = [7, 21, 27]
 
-  const inputRef = useRef();
-  const hello = useRef(() => console.log('Hello'))
-
-  
-  const [showHello, setShowHello] = useState(true)
+  const increment = useCallback((n) => {
+    // setCount(c => c + 1)
+    setCount(c => c + n)
+  }, [])
 
   return (
     <div>
-      
-      <>
-        <button onClick={() => setShowHello(!showHello)}>toggle</button>
-        {showHello && <Hello />}
-        <input ref={inputRef} name="email" value={values.email} onChange={handleChange} />
-        <input
-          name="firstName"
-          placeholder="first name"
-          value={values.firstName}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          value={values.password}
-          onChange={handleChange}
-        />
-        <button onClick={() => {
-          inputRef.current.focus()
-          hello.current()
-        }}>focus</button>
-      </>
+      <Hello increment={increment}/>
+      <div>count: {count}</div>
+      {favNums.map((n) => {
+        return <Square increment={increment} n={n} key={n}/>
+      })}
     </div>
   );
 };
