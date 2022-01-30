@@ -1,41 +1,38 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {useFetch} from './useFetch'
+import React, {useReducer, useState} from "react";
+
+const reducer = (state,action) => {
+  switch(action.type){
+    case 'ADD_TODO':
+      return {
+        todos: [...state.todos, {text: action.data.text, isCompleted: false}],
+        todosCount: state.todosCount + 1
+      }
+    case 'TOGGLE_TODO':
+      return {
+        ...state,
+        todos: state.todos.map((todo, idx) => idx === action.data.idx? {text: todo.text, isCompleted: !todo.isCompleted} : todo),
+      }
+    default:
+      return state
+  }
+}
 
 
 const App = () => {
-  const [count, setCount] = useState(0)
-
-  const {data} = useFetch('https://type.fit/api/quotes')
-
-  //alternatively just move this function outside App and remove this from the useMemo dependency
-  const computeLongestWord = useCallback((arr) => {
-    if(!arr){
-      return []
-    }
-
-    console.log("computing");
-
-    let longestWord =''
-
-
-    JSON.parse(data).map((quote) => quote.text).forEach(sentence => sentence.split(' ').forEach(word => {
-      if(word.length > longestWord.length){
-        longestWord = word
-      }
-    }))
-    
-    return longestWord
-  }, []) //if you have no dependency here, just move the function outside
-
-  const longestWord = useMemo(() => computeLongestWord(data), [data, computeLongestWord])
-
-
+  const [{todos, todosCount}, dispatch] = useReducer(reducer, {todos: [], todosCount: 0})
+  const [text, setText] = useState('')
 
   return (
     <div>
-      <div>Count: {count}</div>
-      <button onClick={() => setCount(count + 1)}>increment</button>
-      <div>{longestWord}</div>
+      <div>TODOS COUNT: {todosCount}</div>
+      <form onSubmit={e => {
+        e.preventDefault()
+        dispatch({type: 'ADD_TODO', data:{text}})
+        setText('')
+      }}>
+        <input value={text} onChange={e => setText(e.target.value)} />
+      </form>
+      {todos.map((todo,idx) => <div key={todo.text} style={{textDecoration:todo.isCompleted? 'line-through' : ''}} onClick={() => dispatch({type: 'TOGGLE_TODO', data:{idx}})}>{todo.text}</div>)}
     </div>
   );
 };
