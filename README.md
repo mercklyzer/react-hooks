@@ -21,4 +21,7 @@
 
 ## useMemo
 1.) when the function inside a component takes a long time to execute, better use useMemo to stop it from re-defining. This is used together with useCallback or just create the function outside the component <br />
-2.) only use this when slow performance is salient.
+2.) only use this when slow performance is salient. <br />
+
+## useReducer
+1.) Same with state. Only use this when the state is complicated (i.e. you have array of todos, todos counter, etc) <br />
